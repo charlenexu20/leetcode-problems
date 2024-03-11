@@ -1,28 +1,17 @@
 class Solution:
     def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
-        # two pointers | tc: O(nlogn) | sc: O(1)
-        
-        nums1.sort()
-        nums2.sort()
+        # hashset | tc: O(N) | sc: O(N)
 
-        i, j = 0, 0
+        seen = set(nums1)
         res = []
 
-        while i < len(nums1) and j < len(nums2):
-            if nums1[i] < nums2[j]:
-                i += 1
-            elif nums1[i] > nums2[j]:
-                j += 1
-            else:
-                if not res or res[- 1] != nums1[i]:
-                    res.append(nums1[i])
-                i += 1
-                j += 1
+        for n in nums2:
+            if n in seen:
+                res.append(n)
+                seen.remove(n)
 
         return res
 
-
-
-
+        
 
         
