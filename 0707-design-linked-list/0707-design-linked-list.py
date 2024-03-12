@@ -1,58 +1,76 @@
-# singly linked list
+# doubly linked list
 
 class ListNode:
 
-    def __init__(self, val=0, next=None):
+    def __init__(self, val=0, prev=None, next=None):
         self.val = val
+        self.prev = prev
         self.next = next
 
 class MyLinkedList:
 
     def __init__(self):
-        self.dummy = ListNode()
+        self.head = ListNode()  # dummy head node
+        self.tail = ListNode()  # dummy tail node
+        self.head.next = self.tail
+        self.tail.prev = self.head
         self.size = 0
-
+        
     def get(self, index: int) -> int:
-        if index < 0 or index >= self.size:
+        if index >= self.size:
             return - 1
 
-        cur = self.dummy.next
-        for i in range(index):
+        cur = self.head.next
+        for _ in range(index):
             cur = cur.next
         return cur.val
 
     def addAtHead(self, val: int) -> None:
-        self.dummy.next = ListNode(val, self.dummy.next)
+        new_node, prev, next = ListNode(val), self.head, self.head.next
+        prev.next = new_node
+        next.prev = new_node
+        new_node.next = next
+        new_node.prev = prev
+
         self.size += 1
 
     def addAtTail(self, val: int) -> None:
-        cur = self.dummy
-        while cur.next:
-            cur = cur.next
-        cur.next = ListNode(val)
-        self.size += 1
+        new_node, prev, next = ListNode(val), self.tail.prev, self.tail
+        prev.next = new_node
+        next.prev = new_node
+        new_node.next = next
+        new_node.prev = prev
 
-    def addAtIndex(self, index: int, val: int) -> None:
-        if index < 0 or index > self.size:
-            return 
+        self.size += 1
         
-        cur = self.dummy
-        for i in range(index):
+    def addAtIndex(self, index: int, val: int) -> None:
+        if index > self.size:
+            return
+
+        cur = self.head.next
+        for _ in range(index):
             cur = cur.next
-        cur.next = ListNode(val, cur.next)
+        
+        new_node, prev, next = ListNode(val), cur.prev, cur
+        prev.next = new_node
+        next.prev = new_node
+        new_node.next = next
+        new_node.prev = prev
+
         self.size += 1
 
     def deleteAtIndex(self, index: int) -> None:
-        if index < 0 or index >= self.size:
+        if index >= self.size:
             return
-
-        cur = self.dummy
-        for i in range(index):
+        
+        cur = self.head.next
+        for _ in range(index):
             cur = cur.next
-        cur.next = cur.next.next
-        self.size -= 1
-            
 
+        cur.prev.next = cur.next
+        cur.next.prev = cur.prev
+
+        self.size -= 1
         
 
 
