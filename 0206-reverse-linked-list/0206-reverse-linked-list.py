@@ -4,20 +4,20 @@
 #         self.val = val
 #         self.next = next
 class Solution:
+     # recursion | tc: O(N) | sc: O(N)
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        # iteration | tc: O(n) | sc: O(1)
+        return self.reverse(head, None)
+    
+    def reverse(self, cur, prev):
+        # base case
+        if not cur:
+            return prev
 
-        cur = head
-        prev = None
+        # store the next node before modifying `next` pointer of current node
+        next = cur.next
 
-        while cur:
-            temp = cur.next
-            cur.next = prev
-            prev = cur
-            cur = temp
+        # reverse `next` pointer of current node to point to previous node
+        cur.next = prev
 
-        return prev
-
-
-        
-            
+        # recursively call function with next node as cur and cur node as prev
+        return self.reverse(next, cur)
