@@ -5,28 +5,19 @@
 #         self.next = next
 class Solution:
     def swapNodes(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        # brute force | tc: O(N)| sc: O(N)
+        # two pointers | tc: O(N) | sc: O(1)
 
-        nodes_array = []
         cur = head
-
-        # traverse the linked list and store the elements in an array
-        while cur:
-            val = cur.val
-            nodes_array.append(val)
+        # move 'cur' to the k-th node from the beginning
+        for _ in range(k - 1):
             cur = cur.next
 
-        # swap the required elements by indexing the array
-        n = len(nodes_array)
-        nodes_array[k - 1], nodes_array[n - k] = nodes_array[n - k], nodes_array[k - 1]
+        left = cur
+        right = head
 
-        # rebuild the linked list using the order of the elements in the array
-        dummy_head = ListNode()
-        cur = dummy_head
-        for val in nodes_array:
-            node = ListNode(val)
-            cur.next = node
+        while cur.next:
             cur = cur.next
-        cur.next = None
+            right = right.next
 
-        return dummy_head.next
+        left.val, right.val = right.val, left.val
+        return head
