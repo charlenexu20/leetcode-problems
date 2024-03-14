@@ -6,17 +6,14 @@
 
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        # hashset | tc: O(n) | sc: O(n)
-        visited = set()
-        cur = head
+        # two pointers (tortoise & hare) | tc: O(N) | sc: O(1)
+        slow = fast = head
 
-        while cur:
-            if cur in visited:
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+            if slow == fast:
                 return True
 
-            visited.add(cur)
-            cur = cur.next
-        
         return False
-
-        
