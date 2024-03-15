@@ -1,14 +1,20 @@
 class Solution:
     def canConstruct(self, ransomNote: str, magazine: str) -> bool:
-        m_count = {}
+        # hashtable | tc: O(n) | sc: O(1)
 
-        for char in magazine:
-            m_count[char] = m_count.get(char, 0) + 1
+        if len(ransomNote) > len(magazine):
+            return False
 
-        for char in ransomNote:
-            if char not in m_count or m_count[char] == 0:
+        # index = letter | value = count
+        record = [0] * 26
+
+        for letter in magazine:
+            record[ord(letter) - ord('a')] += 1
+
+        for letter in ransomNote:
+            record[ord(letter) - ord('a')] -= 1
+            if record[ord(letter) - ord('a')] < 0:
                 return False
-            m_count[char] -= 1
         return True
 
         
