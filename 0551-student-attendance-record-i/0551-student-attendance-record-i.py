@@ -1,18 +1,24 @@
 class Solution:
     def checkRecord(self, s: str) -> bool:
-        # directly check for the 'A's and consecutive 'L's
+        # iterate over the characters and keep separate counts for 'A's and 'L's
         # tc: O(n) | sc: O(1)
 
         absent = 0
+        late = 0
 
-        for i in range(len(s)):
-            if s[i] == "A":
+        for char in s:
+            if char == "A":
                 absent += 1
                 if absent == 2:
                     return False
+            
+            if char == "L":
+                late += 1
+                if late > 2:
+                    return False
 
-            elif i >= 2 and s[i] == s[i-1] == s[i-2] == "L":
-                return False
+            else:
+                late = 0
 
         return True
 
