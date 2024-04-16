@@ -10,25 +10,27 @@ class Node:
 
 class Solution:
     def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
-        # BFS | TC: O(N) | SC: O(N)
+        # BFS(optimized) | TC: O(N) | SC: O(1)
         
-        if not root: return root
-        queue = collections.deque([root])
+        cur = root
+        next_level = root.left if root else None
 
-        while queue:
-            level_size = len(queue)
-            prev = None
-            for _ in range(level_size):
-                node = queue.popleft()
+        while cur and next_level:
+            # Connect left child of current node to its right child
+            cur.left.next = cur.right
 
-                if prev:
-                    prev.next = node
-                prev = node
+            # If current node has a next node, 
+            # connect its right child to left child of next node
+            if cur.next:
+                cur.right.next = cur.next.left
 
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
+            # Move pointer
+            cur = cur.next
+
+            # Update next level start pointer if current level ends
+            if not cur:
+                cur = next_level
+                next_level = cur.left
 
         return root
         
