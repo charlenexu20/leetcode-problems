@@ -6,25 +6,17 @@
 #         self.right = right
 class Solution:
     def minDepth(self, root: Optional[TreeNode]) -> int:
-        # BFS | TC: O(N) |SC: O(N)
+        # DFS recursive
 
         if not root: return 0
-        queue = collections.deque([root])
-        level = 0
+        if not root.left and not root.right: return 1
 
-        while queue:
-            level += 1
+        # Handle the scenario where a node has only one child
+        if not root.left:
+            return 1 + self.minDepth(root.right)
 
-            for _ in range(len(queue)):
-                node = queue.popleft()
+        if not root.right:
+            return 1 + self.minDepth(root.left)
 
-                if not node.left and not node.right:
-                    return level
+        return 1 + min(self.minDepth(root.left), self.minDepth(root.right))
 
-                if node.left:
-                    queue.append(node.left)
-                if node.right:
-                    queue.append(node.right)
-
-        return level
-        
