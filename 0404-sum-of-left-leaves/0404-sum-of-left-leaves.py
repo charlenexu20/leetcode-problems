@@ -6,19 +6,23 @@
 #         self.right = right
 class Solution:
     def sumOfLeftLeaves(self, root: Optional[TreeNode]) -> int:
-        # DFS inorder recursive | tc: O(n) | sc: O(h)
+        # DFS preorder iterative | tc: O(n) | sc: O(h)
 
         if not root: return 0
-        if not root.left and not root.right: return 0
+        stack = [root]
+        res = 0
 
-        left_value = self.sumOfLeftLeaves(root.left)
-        # Check if the left child exists and is a leaf node
-        if root.left and not root.left.left and not root.left.right:
-            left_value = root.left.val
-
-        right_value = self.sumOfLeftLeaves(root.right)
-
-        res = left_value + right_value
+        while stack:
+            node = stack.pop()
+            if node.left and not node.left.left and not node.left.right:
+                res += node.left.val
+            
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
 
         return res
+
+        
         
