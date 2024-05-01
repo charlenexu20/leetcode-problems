@@ -6,16 +6,22 @@
 #         self.right = right
 class Solution:
     def findBottomLeftValue(self, root: Optional[TreeNode]) -> int:
-        # BFS | tc: O(n) | sc: O(n)
-        queue = collections.deque([root])
+        # DFS recursive | tc: O(n) | sc: O(h)
 
-        while queue:
-            node = queue.popleft()
-            if node.right:
-                queue.append(node.right)
-            if node.left:
-                queue.append(node.left)
-
-        # The last leftmost node encountered will be the bottom-left value
-        return node.val
+        self.max_depth = float('-inf')
+        self.res = None
+        self.dfs(root, 0)
+        return self.res
+    
+    def dfs(self, node, depth):
+        if not node.left and not node.right:
+            if depth > self.max_depth:
+                self.max_depth = depth
+                self.res = node.val
+            return
+        
+        if node.left:
+            self.dfs(node.left, depth + 1)
+        if node.right:
+            self.dfs(node.right, depth + 1)
         
