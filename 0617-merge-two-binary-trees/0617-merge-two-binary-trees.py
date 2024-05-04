@@ -6,20 +6,37 @@
 #         self.right = right
 class Solution:
     def mergeTrees(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> Optional[TreeNode]:
-        # DFS recursive | tc: O(n + m)
+        # If one of the roots is None, return the other root
+        if not root1: return root2
+        if not root2: return root1
 
-        # base case
-        if not root1 and not root2: 
-            return None
+        queue = collections.deque([root1, root2])
 
-        # create new merged root node
-        root1_val = root1.val if root1 else 0
-        root2_val = root2.val if root2 else 0
-        root = TreeNode(root1_val + root2_val)
+        # Process nodes level by level
+        while queue:
+            node1 = queue.popleft()
+            node2 = queue.popleft()
 
-        root.left = self.mergeTrees(root1.left if root1 else None, 
-                                    root2.left if root2 else None)
-        root.right = self.mergeTrees(root1.right if root1 else None, 
-                                    root2.right if root2 else None)
+            # Process left children if present in both trees
+            if node1.left and node2.left:
+                queue.append(node1.left)
+                queue.append(node2.left)
+            
+             # Process right children if present in both trees
+            if node1.right and node2.right:
+                queue.append(node1.right)
+                queue.append(node2.right)
 
-        return root
+            # Merge node values
+            node1.val += node2.val
+
+            # If node1 has no left child but node2 has one, merge them
+            if not node1.left and node2.left:
+                node1.left = node2.left
+            # If node1 has no right child but node2 has one, merge them
+            if not node1.right and node2.right:
+                node1.right = node2.right
+
+        # The merged tree is rooted at root1
+        return root1
+
