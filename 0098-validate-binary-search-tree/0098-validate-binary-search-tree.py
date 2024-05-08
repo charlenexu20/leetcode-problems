@@ -6,22 +6,28 @@
 #         self.right = right
 class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        # DFS recursive | tc: O(n) | sc: O(h)
-        
-        def valid(node, left, right):
-            # Base case: If the node is None, it's a valid BST
-            if not node:
-                return True
+        # DFS inorder iterative | tc: O(n) | sc: O(h)
+
+        stack = []
+        cur = root
+        prev = float("-inf")
+
+        while cur or stack:
+            while cur:
+                stack.append(cur)
+                cur = cur.left  # left
             
-            # Check if the current node's value is within the valid range
-            if not (node.val < right and node.val > left):
+            cur = stack.pop()  # mid
+
+            # Check if the current node violates the BST property
+            if prev >= cur.val:
                 return False
-
-            left = valid(node.left, left, node.val)
-            right = valid(node.right, node.val, right)
             
-            return left and right
+            prev = cur.val
+            cur = cur.right  # right
 
-        return valid(root, float("-inf"), float("inf"))
+        return True
+        
+        
 
 
