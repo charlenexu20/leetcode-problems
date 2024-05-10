@@ -6,23 +6,26 @@
 #         self.right = right
 class Solution:
     def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
-        # DFS inorder iterative
+        # DFS inorder recursive
+        
+        if not root:
+            return 0
 
-        stack = []
-        cur = root
-        prev = None
+        self.arr = []
+
+        self.inorder(root)
         res = float('inf')
 
-        while stack or cur:
-            while cur:
-                stack.append(cur)
-                cur = cur.left
-
-            cur = stack.pop()
-
-            if prev:
-                res = min(res, cur.val - prev.val)
-            prev = cur
-            cur = cur.right
+        for i in range(1, len(self.arr)):
+            # calculate the min diff of an ordered array
+            res = min(res, self.arr[i] - self.arr[i - 1])
 
         return res
+
+    def inorder(self, root):
+        if not root:
+            return
+        
+        self.inorder(root.left)
+        self.arr.append(root.val) # convert to ordered array
+        self.inorder(root.right)
