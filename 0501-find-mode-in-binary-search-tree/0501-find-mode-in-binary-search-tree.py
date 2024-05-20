@@ -6,29 +6,36 @@
 #         self.right = right
 class Solution:
     def findMode(self, root: Optional[TreeNode]) -> List[int]:
-        # recursion with dict
+        # recursion with BST
         
-        if not root: 
-            return []
-        
-        counts = defaultdict(int)
-        max_count = 0
-        modes = []
+        self.count = 0 # Count of the current value
+        self.max_count = 0 # Maximum count of any value found so far
+        self.prev = None  # Previous node value in the in-order traversal
+        self.res = [] # List to store the mode(s)
 
-        def inorder(node):
-            nonlocal max_count, modes
-            if not node: return
+        self.searchBST(root)
+        return self.res
 
-            inorder(node.left)
-            counts[node.val] += 1
+    def searchBST(self, cur):
+        if not cur: return
 
-            if counts[node.val] > max_count:
-                max_count = counts[node.val]
-                modes = [node.val]
-            elif counts[node.val] == max_count:
-                modes.append(node.val)
+        # Traverse the left subtree
+        self.searchBST(cur.left)
 
-            inorder(node.right)
+        # Process the current node
+        if not self.prev:
+            self.count = 1
+        elif self.prev.val == cur.val:
+            self.count += 1
+        else:
+            self.count = 1
+        self.prev = cur
 
-        inorder(root)
-        return modes
+        if self.count == self.max_count:
+            self.res.append(cur.val)
+        if self.count > self.max_count:
+            self.max_count = self.count
+            self.res = [cur.val]
+            
+        # Traverse the right subtree
+        self.searchBST(cur.right)
