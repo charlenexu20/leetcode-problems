@@ -7,16 +7,16 @@
 
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        if not root: 
-            return root
+        # tc: O(log n) | sc: O(1)
 
-        # If both are less than the current root, search left subtree
-        if root.val > p.val and root.val > q.val:
-            return self.lowestCommonAncestor(root.left, p, q)
-        
-        # If both are greater than the current root, search right subtree
-        if root.val < p.val and root.val < q.val:
-            return self.lowestCommonAncestor(root.right, p, q)
+        cur = root
 
-        # If neither of the above conditions is met, root is the LCA
-        return root
+        while cur:
+            if cur.val > p.val and cur.val > q.val:
+                cur = cur.left
+            elif cur.val < p.val and cur.val < q.val:
+                cur = cur.right
+            else:
+                return cur
+
+            
