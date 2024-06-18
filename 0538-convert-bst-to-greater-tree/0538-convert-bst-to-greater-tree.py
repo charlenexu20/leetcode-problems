@@ -6,23 +6,23 @@
 #         self.right = right
 class Solution:
     def convertBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        # recursive (reverse inorder) | tc: O(n) | sc: O(h)
+        # iterative (reverse inorder) | tc: O(n)
 
+        if not root:
+            return None
+
+        stack = []
         cur_sum = 0
+        cur = root
 
-        def dfs(node):
-            if not node:
-                return
+        while cur or stack:
+            if cur:
+                stack.append(cur)
+                cur = cur.right
+            else:
+                cur = stack.pop()
+                cur_sum += cur.val
+                cur.val = cur_sum
+                cur = cur.left
 
-            nonlocal cur_sum
-
-            # reverse in-order traversal
-            dfs(node.right) # traverse right subtree
-            # update node value with accumulated sum of all greater nodes
-            tmp = node.val
-            node.val += cur_sum
-            cur_sum += tmp # update cur_sum after processing current node
-            dfs(node.left) # traverse left subtree
-
-        dfs(root)
         return root
