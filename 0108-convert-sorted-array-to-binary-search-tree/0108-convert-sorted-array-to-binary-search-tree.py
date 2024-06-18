@@ -6,19 +6,27 @@
 #         self.right = right
 class Solution:
     def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
-        def buildBST(left: int, right:int) -> Optional[TreeNode]:
-            # Base case:
-            if left > right:
-                return None
+        stack = [(0, len(nums) - 1, None)]  # tuple (left, right, root)
+        root = None
 
-            # Choose the middle element as the root for currrent subtree
-            mid = (left + right) // 2
-            root = TreeNode(nums[mid])
+        while stack:
+            left, right, parent = stack.pop()
+            mid = (left + right) // 2   # Calculate the middle index
+            node = TreeNode(nums[mid])  # Create a new node with the middle value
 
-            # Recursively build left and right subtrees
-            root.left = buildBST(left, mid - 1)
-            root.right = buildBST(mid + 1, right)
+            # Set the node as left or right child of the parent based on its value
+            if parent:
+                if node.val < parent.val:
+                    parent.left = node
+                else:
+                    parent.right = node
+            else:
+                root = node  # If no parent, set this node as the root
 
-            return root
+            # Push left and right subproblems onto the stack
+            if left <= mid - 1:
+                stack.append((left, mid - 1, node))
+            if mid + 1 <= right:
+                stack.append((mid + 1, right, node))
 
-        return buildBST(0, len(nums) - 1)
+        return root
