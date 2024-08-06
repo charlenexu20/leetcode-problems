@@ -1,21 +1,31 @@
 class Solution:
     def lemonadeChange(self, bills: List[int]) -> bool:
-        count_5 = 0
-        count_10 = 0
+        # Greedy | tc: O(n) | sc:O(1)
+
+        five, ten = 0, 0
 
         for bill in bills:
+            # Condition 1
             if bill == 5:
-                count_5 += 1
-            elif bill == 10 and count_5:
-                count_10 += 1
-                count_5 -= 1   
-            elif bill == 20 and (count_5 and count_10) or count_5 >= 3:
-                if count_5 and count_10:
-                    count_5 -= 1
-                    count_10 -= 1
+                five += 1
+
+            # Condition 2
+            if bill == 10:
+                if five <= 0:
+                    return False
+                five -= 1
+                ten += 1
+
+            # Condition 3
+            if bill == 20:
+                # Try use $10 bill for change
+                if five > 0 and ten > 0:
+                    five -= 1
+                    ten -= 1    
+                # Then use three $5 bills for change 
+                elif five >= 3:
+                    five -= 3       
                 else:
-                    count_5 -= 3
-            else: return False
+                    return False
 
         return True
-
