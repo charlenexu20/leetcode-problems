@@ -1,12 +1,15 @@
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        # Add an extra step with cost 0 to handle reaching the top
-        cost.append(0)
+        # DP | tc: O(n) | sc: O(n)
 
-        for i in range(len(cost) - 3, - 1, - 1):
-            # update the cost of the current step
-            cost[i] += min(cost[i + 1], cost[i + 2])
+        # Initialize dp array to account for the step beyond the last one
+        dp = [0] * (len(cost) + 1)
+        dp[0] = 0   # No cost to start
+        dp[1] = 0   # No cost to start
 
-        # Return the minimum cost between the initial two steps
-        return min(cost[0], cost[1])
-        
+
+        for i in range(2, len(cost) + 1):
+            # Recurrence relation
+            dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2])
+
+        return dp[-1]
